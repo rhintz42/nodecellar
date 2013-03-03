@@ -1,6 +1,7 @@
-# Node Cellar Sample Application with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB #
+# Progressbar.io is an application for generating progressbars that others can freely use to post on their site. Its practical purpose would be for things like fundraisers
 
-"Node Cellar" is a sample CRUD application built with with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB.
+"Progressbar.io" is HEAVILY influenced by another project: "Node Cellar" (Which can be found here: https://github.com/ccoenraets/nodecellar.git) of which I got almost all of the starting code from.
+It is a CRUD application built with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB.
 
 The application allows you to browse through a list of wines, as well as add, update, and delete wines.
 
