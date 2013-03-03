@@ -2,7 +2,8 @@ var express = require('express'),
     path = require('path'),
     http = require('http'),
     io = require('socket.io'),
-    wine = require('./routes/wines');
+    wine = require('./routes/wines'),
+    progressbar = require('./routes/progressbars');
 
 var app = express();
 
@@ -36,6 +37,12 @@ app.get('/wines/:id', wine.findById);
 app.post('/wines', wine.addWine);
 app.put('/wines/:id', wine.updateWine);
 app.delete('/wines/:id', wine.deleteWine);
+
+app.get('/progressbars', wine.findAll);
+app.get('/progressbars/:id', wine.findById);
+app.post('/progressbars', wine.addProgressbar);
+app.put('/progressbars/:id', wine.updateProgressbar);
+app.delete('/progressbars/:id', wine.deleteProgressbar);
 
 io.sockets.on('connection', function (socket) {
 

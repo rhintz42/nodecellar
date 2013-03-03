@@ -1,12 +1,17 @@
 var AppRouter = Backbone.Router.extend({
 
     routes: {
-        ""                  : "home",
-        "wines"	            : "list",
-        "wines/page/:page"	: "list",
-        "wines/add"         : "addWine",
-        "wines/:id"         : "wineDetails",
-        "about"             : "about"
+        ""                        : "home",
+        "wines"	                  : "list",
+        "wines/page/:page"	      : "list",
+        "progressbars/add"        : "addProgressbar",
+        "wines/add"               : "addWine",
+        "wines/:id"               : "wineDetails",
+        "progressbars/:id"        : "progressbarDetails",
+        "progressbars"            : "progressbarList",
+        "progressbars/page/:page"	: "progressbarList",
+        "about"                   : "about"
+    
     },
 
     initialize: function () {
@@ -44,6 +49,29 @@ var AppRouter = Backbone.Router.extend({
         $('#content').html(new WineView({model: wine}).el);
         this.headerView.selectMenuItem('add-menu');
 	  },
+	  
+    progressbarList: function(page) {
+        var p = page ? parseInt(page, 10) : 1;
+        var progressbarList = new ProgressbarCollection();
+        progressbarList.fetch({success: function(){
+            $("#content").html(new ProgressbarListView({model: progressbarList, page: p}).el);
+        }});
+        this.headerView.selectMenuItem('home-menu');
+    },
+
+    progressbarDetails: function (id) {
+        var progressbar = new Progressbar({_id: id});
+        progressbar.fetch({success: function(){
+            $("#content").html(new ProgressbarView({model: progressbar}).el);
+        }});
+        this.headerView.selectMenuItem();
+    },
+
+	  addProgressbar: function() {
+        var progressbar = new Progressbar();
+        $('#content').html(new ProgressbarView({model: progressbar}).el);
+        this.headerView.selectMenuItem('add-menu');
+	  },
 
     about: function () {
         if (!this.aboutView) {
@@ -55,7 +83,7 @@ var AppRouter = Backbone.Router.extend({
 
 });
 
-utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'AboutView'], function() {
+utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'ProgressbarView', 'ProgressbarListItemView','AboutView'], function() {
     app = new AppRouter();
     Backbone.history.start();
 });

@@ -5,11 +5,23 @@ var Server = mongo.Server,
     BSON = mongo.BSONPure;
 
 var server = new Server('localhost', 27017, {auto_reconnect: true});
-db = new Db('winedb', server, {safe: true});
+//db = new Db('winedb', server, {safe: true});
+//You can only be connected to 1 database here at a time
+db = new Db('progressbardb', server, {safe: true});
 
 db.open(function(err, db) {
     if(!err) {
         console.log("Connected to 'winedb' database");
+        /*
+        console.log("Hey");
+        db.collection('wines', function(err, collection) {
+            collection.find().toArray(function(err, items) {
+                a = 10;
+                console.log(items);
+                b = 20;
+            });
+        });
+        */
         db.collection('wines', {safe:true}, function(err, collection) {
             if (err) {
                 console.log("The 'wines' collection doesn't exist. Creating it with sample data...");
@@ -30,6 +42,7 @@ exports.findById = function(req, res) {
 };
 
 exports.findAll = function(req, res) {
+    console.log('Getting all of the wines');
     db.collection('wines', function(err, collection) {
         collection.find().toArray(function(err, items) {
             res.send(items);
