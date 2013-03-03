@@ -8,7 +8,7 @@ var express = require('express'),
 var app = express();
 
 app.configure(function () {
-    app.set('port', process.env.PORT || 3000);
+    app.set('port', process.env.PORT || 8080);
     app.use(express.logger('dev'));
     app.use(express.bodyParser())
     app.use(express.static(path.join(__dirname, 'public')));
@@ -38,11 +38,11 @@ app.post('/wines', wine.addWine);
 app.put('/wines/:id', wine.updateWine);
 app.delete('/wines/:id', wine.deleteWine);
 
-app.get('/progressbars', wine.findAll);
-app.get('/progressbars/:id', wine.findById);
-app.post('/progressbars', wine.addProgressbar);
-app.put('/progressbars/:id', wine.updateProgressbar);
-app.delete('/progressbars/:id', wine.deleteProgressbar);
+app.get('/progressbars', progressbar.findAll);
+app.get('/progressbars/:id', progressbar.findById);
+app.post('/progressbars', progressbar.addProgressbar);
+app.put('/progressbars/:id', progressbar.updateProgressbar);
+app.delete('/progressbars/:id', progressbar.deleteProgressbar);
 
 io.sockets.on('connection', function (socket) {
 
