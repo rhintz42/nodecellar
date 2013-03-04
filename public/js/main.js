@@ -62,7 +62,9 @@ var AppRouter = Backbone.Router.extend({
     progressbarDetails: function (id) {
         var progressbar = new Progressbar({_id: id});
         progressbar.fetch({success: function(){
-            $("#content").html(new ProgressbarView({model: progressbar}).el);
+            pbarView = new ProgressbarView({model: progressbar}).el;
+            $("#content").html(pbarView);
+            //pbar.drawProgressbar();
         }});
         this.headerView.selectMenuItem();
     },

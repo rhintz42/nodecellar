@@ -1,21 +1,89 @@
 window.ProgressbarView = Backbone.View.extend({
 
     initialize: function () {
-        this.render();
+        console.log("1");
+        //$.when(
+          this.render();
+        //).then(
+          console.log("2");
+        //)
+        
     },
 
     render: function () {
         $(this.el).html(this.template(this.model.toJSON()));
+        /*
+        $(this.el).show(0, function() {
+          this.drawProgressbar;
+        });
+        */
+        this.onRenderComplete();
         return this;
     },
 
     events: {
         "change"        : "change",
         "click .save"   : "beforeSave",
+        "click .draw"   : "drawProgressbar",
         "click .delete" : "deleteProgressbar",
         "drop #picture" : "dropHandler"
     },
+    
+    onRenderComplete: function () {
+    // check every 200ms to see if this.el has been injected into the DOM
+        if (!$.contains(document.documentElement, this.el)) {
+            var that = this;
+            setTimeout(function () {
+                console.log("Hey");
+                that.onRenderComplete();
+            }, 0);
+            return;
+        }
 
+        // now proceed with code that depends on this.el being in the DOM
+        //console.log($(this.el).height());
+        //this.drawProgressbar();
+        /*
+        var c=new BoxSet();
+        c.add({x:150,y:150,w:100,h:100});
+        c.add({x:10,y:10,w:100,h:100});
+         
+        var v=new SetView({
+          el:$("canvas"),
+          collection :c
+        });
+        v.render();
+        */
+      var stage = new Kinetic.Stage({
+        container: 'container',
+        width: 578,
+        height: 200
+      });
+
+      var layer = new Kinetic.Layer();
+
+      var rect = new Kinetic.Rect({
+        x: 239,
+        y: 75,
+        width: 100,
+        height: 50,
+        fill: 'green',
+        stroke: 'black',
+        strokeWidth: 4,
+        draggable: true
+      });
+      var that = this;
+      rect.on('mousedown', function() {
+        that.drawProgressbar();
+      });
+
+      // add the shape to the layer
+      layer.add(rect);
+
+      // add the layer to the stage
+      stage.add(layer);
+    },
+    
     change: function (event) {
         // Remove any existing alert message
         utils.hideAlert();
@@ -51,6 +119,7 @@ window.ProgressbarView = Backbone.View.extend({
         console.log('before save');
         this.model.save(null, {
             success: function (model) {
+                alert("My First JavaScript");
                 self.render();
                 app.navigate('progressbars/' + model.id, false);
                 utils.showAlert('Success!', 'Progressbar saved successfully', 'alert-success');
@@ -59,6 +128,16 @@ window.ProgressbarView = Backbone.View.extend({
                 utils.showAlert('Error', 'An error occurred while trying to delete this item', 'alert-error');
             }
         });
+    },
+
+    drawProgressbar: function () {
+        console.log("Hello");
+        utils.showAlert('Success!', 'Progressbar saved successfully', 'alert-success');
+        var c = document.getElementById("canvas");
+        var ctx = c.getContext("2d");
+        ctx.fillStyle="#ff0000";
+        ctx.fillRect(0,0,150,150);
+        return false;
     },
 
     deleteProgressbar: function () {
@@ -87,3 +166,45 @@ window.ProgressbarView = Backbone.View.extend({
     }
 
 });
+
+window.Box = Backbone.Model.extend({
+defaults: {
+x: 0,
+y: 0,
+w: 1,
+h: 1,
+color: "#FF9000",
+linewidth: 3
+}
+});
+
+window.BoxSet = Backbone.Collection.extend({
+model:Box 
+});
+
+window.BoxView= Backbone.View.extend({
+render : function() {
+var model=this.model, ctx=this.options.ctx;
+
+ctx.fillStyle = "#FF9000";
+ctx.globalAlpha = 0.1;
+ctx.fillRect(model.get("x"), model.get("y"), model.get("w"), model.get("h")); //transparent box in the back
+ctx.globalAlpha = 1;
+ctx.strokeStyle = model.get("color");
+ctx.lineWidth = model.get("linewidth");
+ctx.strokeRect(model.get("x"), model.get("y"), model.get("w"), model.get("h")); //rectangle on top  
+}
+});
+
+window.SetView= Backbone.View.extend({
+render: function() {
+var ctx=this.$el.get(0).getContext("2d");
+ 
+this.collection.each(function(model) {
+var view=new BoxView({ctx:ctx,model:model});
+view.render();            
+})
+}
+});
+
+
