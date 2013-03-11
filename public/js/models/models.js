@@ -122,3 +122,26 @@ window.ProgressbarCollection = Backbone.Collection.extend({
     url: "/progressbars"
 
 });
+
+//-----------------------------------------------------------------
+//THIS IS A TEST TO SEE WHAT I CAN DO WITH IMPORTS FOR KINETICJS
+//------------------------------------------------------------------
+function addFillRectangle(x, y, width, height, fill, name) {
+    //var stage = group.getStage();
+    //var layer = group.getLayer();
+
+    var rect = new Kinetic.Rect({
+        x: x,
+        y: y,
+        width: width,
+        height: height,
+        fill: fill,
+        name: name,
+        stroke: 'black',
+        strokeWidth: 4,
+        draggable: true
+    });
+
+
+    return rect;
+}

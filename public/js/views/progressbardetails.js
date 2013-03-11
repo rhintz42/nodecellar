@@ -61,7 +61,7 @@ window.ProgressbarView = Backbone.View.extend({
       });
 
       var layer = new Kinetic.Layer();
-
+      /*
       var rect = new Kinetic.Rect({
         x: 239,
         y: 75,
@@ -71,14 +71,22 @@ window.ProgressbarView = Backbone.View.extend({
         stroke: 'black',
         strokeWidth: 4,
         draggable: true
+      });*/
+      var thermometerGroup = new Kinetic.Group({
+        x: 239,
+        y: 75,
+        draggable: false
       });
+      var rect = addFillRectangle(0, 0, 100, 50, 'green', 'hello');
+
       var that = this;
       rect.on('mousedown', function() {
         that.drawProgressbar();
       });
-
+      thermometerGroup.add(rect);
+      layer.add(thermometerGroup);
       // add the shape to the layer
-      layer.add(rect);
+      //layer.add(rect);
 
       // add the layer to the stage
       stage.add(layer);
